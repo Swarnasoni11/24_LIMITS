@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthTrace AI | Your Personal Health Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-teal: #0FA3B1;
+            --dark-teal: #0A7A86;
+            --light-teal: #E6F7F9;
+            --mint-green: #B5E2D9;
+            --soft-green: #8BC9B5;
+            --light-cream: #F9F7F3;
+            --warm-gray: #EDE6E3;
+            --accent-coral: #FF6B6B;
+            --accent-orange: #FF9F68;
+            --dark-text: #2D3748;
+            --medium-text: #4A5568;
+            --light-text: #718096;
+            --card-shadow: 0 10px 25px rgba(15, 163, 177, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: linear-gradient(135deg, #f5fdfe 0%, #f0f9fb 100%);
+            color: var(--dark-text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0 25px;
+            margin-bottom: 10px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-teal), var(--soft-green));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+            box-shadow: 0 8px 16px rgba(15, 163, 177, 0.2);
+        }
+
+        .logo-text h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 28px;
+            color: var(--dark-teal);
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: var(--medium-text);
+            margin-top: 2px;
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .health-score {
+            background: linear-gradient(135deg, var(--primary-teal), var(--soft-green));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(15, 163, 177, 0.2);
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-coral));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+            border: 3px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 25px;
+            flex: 1;
+        }
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+            border: 1px solid rgba(15, 163, 177, 0.1);
+        }
+
+        .chat-header {
+            background: linear-gradient(90deg, var(--primary-teal), var(--dark-teal));
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .ai-avatar {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-teal);
+            font-size: 24px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-title-text h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 22px;
+        }
+
+        .chat-title-text p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background-color: var(--light-cream);
+        }
+
+        .message {
+            display: flex;
+            max-width: 85%;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            align-self: flex-end;
+        }
+
+        .message.ai {
+            align-self: flex-start;
+        }
+
+        .message-bubble {
+            padding: 18px;
+            border-radius: 18px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, var(--primary-teal), var(--soft-green));
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.ai .message-bubble {
+            background: white;
+            border-bottom-left-radius: 5px;
+            border-left: 4px solid var(--primary-teal);
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .message-sender {
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: var(--light-text);
+        }
+
+        .message.user .message-time {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .message-text {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .suggestion-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tag {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tag.routine {
+            background-color: rgba(15, 163, 177, 0.1);
+            color: var(--dark-teal);
+        }
+
+        .tag.wellness {
+            background-color: rgba(139, 201, 181, 0.15);
+            color: var(--soft-green);
+        }
+
+        .tag.nutrition {
+            background-color: rgba(255, 159, 104, 0.15);
+            color: var(--accent-orange);
+        }
+
+        .tag.exercise {
+            background-color: rgba(255, 107, 107, 0.15);
+            color: var(--accent-coral);
+        }
+
+        .tag.sleep {
+            background-color: rgba(100, 100, 255, 0.1);
+            color: #6464ff;
+        }
+
+        .why-btn {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary-teal);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            margin-top: 15px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .message.user .why-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .why-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            border-top: 1px solid var(--warm-gray);
+            display: flex;
+            gap: 15px;
+            background: white;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 1px solid var(--warm-gray);
+            border-radius: 15px;
+            font-size: 16px;
+            font-family: 'Source Sans Pro', sans-serif;
+            transition: var(--transition);
+            background: var(--light-cream);
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-teal);
+            box-shadow: 0 0 0 3px rgba(15, 163, 177, 0.1);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, var(--primary-teal), var(--soft-green));
+            color: white;
+            border: none;
+            width: 60px;
+            border-radius: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(15, 163, 177, 0.2);
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(15, 163, 177, 0.3);
+        }
+
+        /* Health Planner */
+        .planner-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            border: 1px solid rgba(15, 163, 177, 0.1);
+        }
+
+        .planner-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--warm-gray);
+        }
+
+        .planner-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+            color: var(--dark-teal);
+        }
+
+        .planner-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-coral));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .planner-content {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .plan-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--light-cream);
+            border-radius: 15px;
+            border-left: 4px solid var(--primary-teal);
+            transition: var(--transition);
+        }
+
+        .plan-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .plan-time {
+            font-weight: 600;
+            color: var(--dark-teal);
+            min-width: 70px;
+        }
+
+        .plan-details h4 {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark-text);
+        }
+
+        .plan-details p {
+            font-size: 14px;
+            color: var(--medium-text);
+        }
+
+        .plan-status {
+            margin-left: auto;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--warm-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .plan-status.completed {
+            background: var(--soft-green);
+        }
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .transparency-panel {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(15, 163, 177, 0.1);
+            height: 600px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--warm-gray);
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+            color: var(--dark-teal);
+        }
+
+        .panel-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-teal), var(--soft-green));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .explanation-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .explanation-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 100%;
+            color: var(--medium-text);
+            padding: 40px 20px;
+        }
+
+        .explanation-placeholder i {
+            font-size: 60px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary-teal), var(--soft-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .explanation-active {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .explanation-reason {
+            background: var(--light-cream);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary-teal);
+        }
+
+        .explanation-reason h4 {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark-teal);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .data-used {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .data-used h4 {
+            color: var(--dark-teal);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .data-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .data-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: var(--light-cream);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-orange);
+        }
+
+        .data-info h5 {
+            font-size: 15px;
+            margin-bottom: 5px;
+            color: var(--dark-text);
+        }
+
+        .data-info p {
+            font-size: 13px;
+            color: var(--medium-text);
+        }
+
+        .data-tags {
+            display: flex;
+            gap: 8px;
+        }
+
+        .data-tag {
+            font-size: 11px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .data-tag.consent {
+            background-color: rgba(15, 163, 177, 0.1);
+            color: var(--dark-teal);
+        }
+
+        .data-tag.explainable {
+            background-color: rgba(139, 201, 181, 0.15);
+            color: var(--soft-green);
+        }
+
+        .data-tag.user-controlled {
+            background-color: rgba(255, 159, 104, 0.15);
+            color: var(--accent-orange);
+        }
+        .stats-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            border: 1px solid rgba(15, 163, 177, 0.1);
+        }
+
+        .stats-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+            color: var(--dark-teal);
+        }
+
+        .stats-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: var(--light-cream);
+            border-radius: 15px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-teal);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--medium-text);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--warm-gray);
+            text-align: center;
+            color: var(--medium-text);
+            font-size: 14px;
+        }
+
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .badge i {
+            color: var(--primary-teal);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .right-panel {
+                grid-column: 1;
+                grid-template-columns: 1fr 1fr;
+                display: grid;
+                gap: 25px;
+            }
+            
+            .transparency-panel {
+                height: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .user-area {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .main-content {
+                gap: 20px;
+            }
+            
+            .right-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .message {
+                max-width: 95%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .trust-badges {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-area">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>HealthTrace AI</h1>
+                    <p>Personalized Health Tracking & Planning</p>
+                </div>
+            </div>
+            <div class="user-area">
+                <div class="health-score">
+                    <i class="fas fa-chart-line"></i>
+                    Health Score: 82
+                </div>
+                <div class="user-avatar">JD</div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Left Panel: Chat & Planner -->
+            <div class="left-panel">
+                <!-- Chat Container -->
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="chat-title">
+                            <div class="ai-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="chat-title-text">
+                                <h2>Your Health Assistant</h2>
+                                <p>Ask about health plans, routines, or suggestions</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- AI Welcome Message -->
+                        <div class="message ai">
+                            <div class="message-bubble">
+                                <div class="message-header">
+                                    <div class="message-sender">
+                                        <i class="fas fa-robot"></i> HealthTrace AI
+                                    </div>
+                                    <div class="message-time">9:45 AM</div>
+                                </div>
+                                <div class="message-text">
+                                    <p>Hello! I'm your HealthTrace assistant. I can help you with:</p>
+                                    <ul style="margin-left: 20px; margin-top: 8px;">
+                                        <li>Daily health routines & wellness plans</li>
+                                        <li>Personalized suggestions based on your data</li>
+                                        <li>Weekly health planning</li>
+                                        <li>Understanding your health patterns</li>
+                                    </ul>
+                                    <p style="margin-top: 12px;"><strong>Try asking: "Can you create a wellness plan for me?" or "Suggest improvements to my daily routine"</strong></p>
+                                </div>
+                                <div class="suggestion-tags">
+                                    <div class="tag routine">Daily Routine</div>
+                                    <div class="tag wellness">Wellness Plan</div>
+                                    <div class="tag nutrition">Nutrition</div>
+                                </div>
+                                <button class="why-btn" data-suggestion="welcome-suggestion">
+                                    <i class="fas fa-question-circle"></i> How do I work?
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- User Message -->
+                        <div class="message user">
+                            <div class="message-bubble">
+                                <div class="message-header">
+                                    <div class="message-sender">
+                                        <i class="fas fa-user"></i> You
+                                    </div>
+                                    <div class="message-time">9:47 AM</div>
+                                </div>
+                                <div class="message-text">
+                                    <p>Can you create a weekly wellness plan for me?</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Response with Plan -->
+                        <div class="message ai">
+                            <div class="message-bubble">
+                                <div class="message-header">
+                                    <div class="message-sender">
+                                        <i class="fas fa-robot"></i> HealthTrace AI
+                                    </div>
+                                    <div class="message-time">9:48 AM</div>
+                                </div>
+                                <div class="message-text">
+                                    <p>Based on your activity levels and sleep patterns, I've created a <strong>personalized weekly wellness plan</strong>:</p>
+                                    <ul style="margin-left: 20px; margin-top: 10px;">
+                                        <li><strong>Mon/Wed/Fri:</strong> 20-min morning yoga + protein-rich breakfast</li>
+                                        <li><strong>Tue/Thu:</strong> 30-min brisk walk after work</li>
+                                        <li><strong>Daily:</strong> 10-min mindfulness meditation before bed</li>
+                                        <li><strong>Weekend:</strong> Active recovery with light stretching</li>
+                                    </ul>
+                                </div>
+                                <div class="suggestion-tags">
+                                    <div class="tag wellness">Wellness Plan</div>
+                                    <div class="tag routine">Weekly Schedule</div>
+                                    <div class="tag exercise">Exercise</div>
+                                </div>
+                                <button class="why-btn" data-suggestion="wellness-plan">
+                                    <i class="fas fa-question-circle"></i> Why this plan?
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- AI Follow-up -->
+                        <div class="message ai">
+                            <div class="message-bubble">
+                                <div class="message-header">
+                                    <div class="message-sender">
+                                        <i class="fas fa-robot"></i> HealthTrace AI
+                                    </div>
+                                    <div class="message-time">9:49 AM</div>
+                                </div>
+                                <div class="message-text">
+                                    <p>I also suggest <strong>drinking 8 glasses of water daily</strong> and <strong>taking short screen breaks every hour</strong> to reduce eye strain.</p>
+                                </div>
+                                <div class="suggestion-tags">
+                                    <div class="tag wellness">Hydration</div>
+                                    <div class="tag routine">Eye Health</div>
+                                </div>
+                                <button class="why-btn" data-suggestion="hydration-suggestion">
+                                    <i class="fas fa-question-circle"></i> Why this suggestion?
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-area">
+                        <input type="text" class="chat-input" id="userInput" placeholder="Ask about health plans, routines, or suggestions...">
+                        <button class="send-btn" id="sendBtn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Health Planner -->
+                <div class="planner-container">
+                    <div class="planner-header">
+                        <div class="planner-title">
+                            <div class="planner-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h3>Today's Health Plan</h3>
+                        </div>
+                        <div class="health-score" style="padding: 5px 12px; font-size: 13px;">
+                            <i class="fas fa-check-circle"></i> 3/5 Completed
+                        </div>
+                    </div>
+                    <div class="planner-content">
+                        <div class="plan-item">
+                            <div class="plan-time">8:00 AM</div>
+                            <div class="plan-details">
+                                <h4>Morning Stretch</h4>
+                                <p>10 minutes of light stretching</p>
+                            </div>
+                            <div class="plan-status completed">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        <div class="plan-item">
+                            <div class="plan-time">10:00 AM</div>
+                            <div class="plan-details">
+                                <h4>Healthy Snack</h4>
+                                <p>Apple with almond butter</p>
+                            </div>
+                            <div class="plan-status completed">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        <div class="plan-item">
+                            <div class="plan-time">1:00 PM</div>
+                            <div class="plan-details">
+                                <h4>Post-Lunch Walk</h4>
+                                <p>15-minute walk after lunch</p>
+                            </div>
+                            <div class="plan-status completed">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        <div class="plan-item">
+                            <div class="plan-time">4:00 PM</div>
+                            <div class="plan-details">
+                                <h4>Hydration Check</h4>
+                                <p>Drink 2 glasses of water</p>
+                            </div>
+                            <div class="plan-status">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                        </div>
+                        <div class="plan-item">
+                            <div class="plan-time">9:00 PM</div>
+                            <div class="plan-details">
+                                <h4>Mindfulness Practice</h4>
+                                <p>10-minute meditation before bed</p>
+                            </div>
+                            <div class="plan-status">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Transparency & Stats -->
+            <div class="right-panel">
+                <!-- Transparency Panel -->
+                <div class="transparency-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <div class="panel-icon">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <h3>AI Transparency</h3>
+                        </div>
+                        <div class="health-score" style="padding: 5px 12px; font-size: 13px;">
+                            <i class="fas fa-eye"></i> Explainable AI
+                        </div>
+                    </div>
+
+                    <div class="explanation-content" id="explanationContent">
+                        <!-- Default Placeholder -->
+                        <div class="explanation-placeholder" id="defaultExplanation">
+                            <i class="fas fa-info-circle"></i>
+                            <h3>AI Suggestion Transparency</h3>
+                            <p>Click "Why this suggestion?" on any AI recommendation to see:</p>
+                            <ul style="text-align: left; margin-top: 15px; padding-left: 20px;">
+                                <li>Past activities used for this suggestion</li>
+                                <li>User-approved data references</li>
+                                <li>Simple reasoning in plain language</li>
+                                <li>Consent and privacy status</li>
+                            </ul>
+                            <div style="margin-top: 20px; padding: 15px; background: var(--light-cream); border-radius: 12px; border-left: 4px solid var(--primary-teal);">
+                                <p><strong>Your data is protected:</strong> All suggestions are based only on data you've approved for use.</p>
+                            </div>
+                        </div>
+
+                        <!-- Active Explanation (Hidden by Default) -->
+                        <div class="explanation-active" id="activeExplanation" style="display: none;">
+                            <div class="explanation-reason">
+                                <h4><i class="fas fa-lightbulb"></i> AI Reasoning</h4>
+                                <p id="reasoningText"></p>
+                            </div>
+
+                            <div class="data-used">
+                                <h4><i class="fas fa-database"></i> Data Used for This Suggestion</h4>
+                                <div class="data-items" id="dataItems">
+                                    <!-- Data items will be inserted here -->
+                                </div>
+                            </div>
+
+                            <div class="data-used">
+                                <h4><i class="fas fa-history"></i> Relevant Past Activities</h4>
+                                <div class="data-items" id="historyItems">
+                                    <!-- History items will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Stats -->
+                <div class="stats-container">
+                    <div class="stats-header">
+                        <div class="stats-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3>Health Insights</h3>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">7.2</div>
+                            <div class="stat-label">Avg Sleep Hours</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">84%</div>
+                            <div class="stat-label">Hydration Goal</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">5,240</div>
+                            <div class="stat-label">Today's Steps</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Mindfulness Sessions</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding: 15px; background: var(--light-cream); border-radius: 12px;">
+                        <p style="font-size: 14px; color: var(--medium-text);"><i class="fas fa-lightbulb" style="color: var(--accent-orange);"></i> <strong>Insight:</strong> Your step count has increased by 15% compared to last week. Keep it up!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>HealthTrace AI – Transparent, User-Controlled Health Tracking & Planning</p>
+            <div class="trust-badges">
+                <div class="badge">
+                    <i class="fas fa-lock"></i> End-to-End Encryption
+                </div>
+                <div class="badge">
+                    <i class="fas fa-user-shield"></i> User-Controlled Data
+                </div>
+                <div class="badge">
+                    <i class="fas fa-clipboard-list"></i> Explainable AI
+                </div>
+                <div class="badge">
+                    <i class="fas fa-heart"></i> Healthcare Focused
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const explanations = {
+            'welcome-suggestion': {
+                reasoning: "I analyze your health data with full transparency. Every suggestion I make is based on patterns in your approved health data, never on assumptions or external factors without your consent.",
+                dataItems: [
+                    {
+                        title: "Health Profile",
+                        description: "Your basic health information and preferences",
+                        date: "Profile setup",
+                        tags: ['user-controlled']
+                    },
+                    {
+                        title: "Consent Settings",
+                        description: "Your data sharing preferences and permissions",
+                        date: "Updated weekly",
+                        tags: ['consent', 'user-controlled']
+                    }
+                ],
+                historyItems: [
+                    { activity: "HealthTrace AI setup completed", date: "2 weeks ago" },
+                    { activity: "Privacy preferences configured", date: "2 weeks ago" },
+                    { activity: "Initial health assessment", date: "2 weeks ago" }
+                ]
+            },
+            'wellness-plan': {
+                reasoning: "This weekly wellness plan is tailored based on your moderate activity level, irregular sleep patterns recorded last month, and your stated goal to improve overall wellbeing without overwhelming your schedule.",
+                dataItems: [
+                    {
+                        title: "Activity Level",
+                        description: "Moderate activity (avg 5,200 steps/day) recorded over past month",
+                        date: "Past 30 days",
+                        tags: ['consent', 'user-controlled']
+                    },
+                    {
+                        title: "Sleep Patterns",
+                        description: "Irregular sleep schedule with average of 6.8 hours/night",
+                        date: "Last month",
+                        tags: ['consent', 'explainable']
+                    },
+                    {
+                        title: "Wellness Goal",
+                        description: "You set a goal to 'improve overall wellbeing and energy levels'",
+                        date: "2 weeks ago",
+                        tags: ['user-controlled']
+                    },
+                    {
+                        title: "Stress Indicators",
+                        description: "Elevated stress markers on 3 days/week average",
+                        date: "Past 2 weeks",
+                        tags: ['consent', 'explainable']
+                    }
+                ],
+                historyItems: [
+                    { activity: "Completed 4,800 steps yesterday", date: "Yesterday" },
+                    { activity: "Morning yoga session (15 min)", date: "3 days ago" },
+                    { activity: "Reported feeling 'low energy' in afternoon", date: "Last week" },
+                    { activity: "Meditation streak: 5 days", date: "Current" }
+                ]
+            },
+            'hydration-suggestion': {
+                reasoning: "This hydration suggestion is based on your average water intake of 5 glasses per day and your recent reports of afternoon fatigue, which can often be linked to mild dehydration.",
+                dataItems: [
+                    {
+                        title: "Water Intake",
+                        description: "Average 5 glasses of water per day recorded",
+                        date: "Past 2 weeks",
+                        tags: ['consent', 'user-controlled']
+                    },
+                    {
+                        title: "Afternoon Fatigue",
+                        description: "Reported energy dips at 3 PM on 4/7 days last week",
+                        date: "Last week",
+                        tags: ['consent']
+                    },
+                    {
+                        title: "Climate Factor",
+                        description: "Warmer temperatures this week increasing hydration needs",
+                        date: "Current",
+                        tags: ['explainable']
+                    }
+                ],
+                historyItems: [
+                    { activity: "Drank 4 glasses of water yesterday", date: "Yesterday" },
+                    { activity: "Reported headache on low-water day", date: "5 days ago" },
+                    { activity: "Set hydration reminder in app", date: "3 days ago" }
+                ]
+            },
+            'exercise-plan': {
+                reasoning: "This exercise plan is designed based on your current fitness level, available time, and preference for home workouts. It balances cardio, strength, and recovery.",
+                dataItems: [
+                    {
+                        title: "Fitness Level",
+                        description: "Beginner-intermediate based on recent workout history",
+                        date: "Past month",
+                        tags: ['consent', 'user-controlled']
+                    },
+                    {
+                        title: "Available Time",
+                        description: "You indicated 30-45 minutes available for exercise",
+                        date: "Last week",
+                        tags: ['user-controlled']
+                    },
+                    {
+                        title: "Workout Preference",
+                        description: "Prefer home workouts with minimal equipment",
+                        date: "Profile settings",
+                        tags: ['user-controlled']
+                    }
+                ],
+                historyItems: [
+                    { activity: "Completed 3 home workouts last week", date: "Last week" },
+                    { activity: "Reported muscle soreness after intense workout", date: "5 days ago" },
+                    { activity: "Set goal: Exercise 4x per week", date: "2 weeks ago" }
+                ]
+            },
+            'nutrition-plan': {
+                reasoning: "This nutrition plan considers your dietary preferences, current eating patterns, and health goals. It focuses on balanced meals and sustainable habits.",
+                dataItems: [
+                    {
+                        title: "Dietary Preferences",
+                        description: "No specific restrictions, prefer home-cooked meals",
+                        date: "Profile settings",
+                        tags: ['user-controlled']
+                    },
+                    {
+                        title: "Current Eating Pattern",
+                        description: "Skipping breakfast 2-3 times per week",
+                        date: "Last week",
+                        tags: ['consent']
+                    },
+                    {
+                        title: "Health Goals",
+                        description: "Goal to improve energy levels and digestion",
+                        date: "2 weeks ago",
+                        tags: ['user-controlled']
+                    }
+                ],
+                historyItems: [
+                    { activity: "Reported afternoon energy crashes", date: "3 days ago" },
+                    { activity: "Ate out 4 times last week", date: "Last week" },
+                    { activity: "Completed food log for 5 days", date: "Last week" }
+                ]
+            },
+            'sleep-suggestion': {
+                reasoning: "This sleep suggestion addresses your irregular sleep schedule and difficulty falling asleep, which you reported affects your next-day energy and focus.",
+                dataItems: [
+                    {
+                        title: "Sleep Duration",
+                        description: "Average 6.5 hours of sleep per night",
+                        date: "Past 2 weeks",
+                        tags: ['consent', 'user-controlled']
+                    },
+                    {
+                        title: "Sleep Quality",
+                        description: "Reported difficulty falling asleep 4 nights/week",
+                        date: "Last week",
+                        tags: ['consent']
+                    },
+                    {
+                        title: "Bedtime Routine",
+                        description: "Screen use within 30 minutes of bedtime",
+                        date: "Daily tracking",
+                        tags: ['explainable']
+                    }
+                ],
+                historyItems: [
+                    { activity: "Went to bed after midnight 5/7 nights", date: "Last week" },
+                    { activity: "Used phone in bed for 45 minutes", date: "Last night" },
+                    { activity: "Slept well after evening walk", date: "3 days ago" }
+                ]
+            },
+            'stress-suggestion': {
+                reasoning: "These stress management suggestions are based on your reported stress levels and the timing of stress peaks during your workday.",
+                dataItems: [
+                    {
+                        title: "Stress Levels",
+                        description: "Self-reported stress averaging 7/10 during work hours",
+                        date: "Last week",
+                        tags: ['consent']
+                    },
+                    {
+                        title: "Stress Timing",
+                        description: "Stress peaks reported at 11 AM and 3 PM",
+                        date: "Last week",
+                        tags: ['consent', 'explainable']
+                    },
+                    {
+                        title: "Current Coping Methods",
+                        description: "Limited use of structured stress management techniques",
+                        date: "Last check-in",
+                        tags: ['user-controlled']
+                    }
+                ],
+                historyItems: [
+                    { activity: "Reported high stress before meetings", date: "Yesterday" },
+                    { activity: "Tried 5-minute breathing exercise", date: "2 days ago" },
+                    { activity: "Missed lunch break due to work stress", date: "3 days ago" }
+                ]
+            }
+        };
+        function showExplanation(suggestionId) {
+            console.log("Button clicked with ID:", suggestionId);
+            
+            const explanation = explanations[suggestionId];
+            if (!explanation) {
+                console.error("No explanation found for:", suggestionId);
+                // Show default explanation if not found
+                document.getElementById('defaultExplanation').style.display = 'flex';
+                document.getElementById('activeExplanation').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('defaultExplanation').style.display = 'none';
+            
+
+            const activeExplanation = document.getElementById('activeExplanation');
+            activeExplanation.style.display = 'flex';
+            document.getElementById('reasoningText').textContent = explanation.reasoning;
+
+            const dataItemsContainer = document.getElementById('dataItems');
+            dataItemsContainer.innerHTML = '';
+            explanation.dataItems.forEach(item => {
+                const tagsHtml = item.tags.map(tag => {
+                    let icon = 'fas fa-user-check';
+                    let label = 'User-controlled';
+                    
+                    if (tag === 'consent') {
+                        icon = 'fas fa-shield-alt';
+                        label = 'Consent-based';
+                    } else if (tag === 'explainable') {
+                        icon = 'fas fa-brain';
+                        label = 'Explainable AI';
+                    }
+                    
+                    return `<span class="data-tag ${tag}"><i class="${icon}"></i> ${label}</span>`;
+                }).join('');
+                
+                dataItemsContainer.innerHTML += `
+                    <div class="data-item">
+                        <div class="data-info">
+                            <h5>${item.title}</h5>
+                            <p>${item.description} • ${item.date}</p>
+                        </div>
+                        <div class="data-tags">
+                            ${tagsHtml}
+                        </div>
+                    </div>
+                `;
+            });
+          
+            const historyItemsContainer = document.getElementById('historyItems');
+            historyItemsContainer.innerHTML = '';
+            
+            explanation.historyItems.forEach(item => {
+                historyItemsContainer.innerHTML += `
+                    <div class="data-item">
+                        <div class="data-info">
+                            <h5>${item.activity}</h5>
+                            <p>${item.date}</p>
+                        </div>
+                    </div>
+                `;
+            });
+          
+            document.querySelector('.explanation-content').scrollTop = 0;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            document.querySelectorAll('.why-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const suggestionId = this.getAttribute('data-suggestion');
+                    showExplanation(suggestionId);
+                });
+            });
+        
+            document.querySelectorAll('.plan-status').forEach(status => {
+                status.addEventListener('click', function() {
+                    this.classList.toggle('completed');
+                    const icon = this.querySelector('i');
+                    if (this.classList.contains('completed')) {
+                        icon.className = 'fas fa-check';
+                        updateCompletedCount();
+                    } else {
+                        icon.className = 'fas fa-clock';
+                        updateCompletedCount();
+                    }
+                });
+            });
+            
+            // Chat functionality
+            document.getElementById('sendBtn').addEventListener('click', sendMessage);
+            document.getElementById('userInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+
+        function updateCompletedCount() {
+            const completed = document.querySelectorAll('.plan-status.completed').length;
+            const total = document.querySelectorAll('.plan-status').length;
+            document.querySelector('.planner-header .health-score').innerHTML = 
+                `<i class="fas fa-check-circle"></i> ${completed}/${total} Completed`;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (message === '') return;
+            
+            // Add user message to chat
+            const chatMessages = document.getElementById('chatMessages');
+            const now = new Date();
+            const timeString = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+            
+            const userMessageHtml = `
+                <div class="message user">
+                    <div class="message-bubble">
+                        <div class="message-header">
+                            <div class="message-sender">
+                                <i class="fas fa-user"></i> You
+                            </div>
+                            <div class="message-time">${timeString}</div>
+                        </div>
+                        <div class="message-text">
+                            <p>${message}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            chatMessages.innerHTML += userMessageHtml;
+     
+            input.value = '';
+    
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+            document.getElementById('defaultExplanation').style.display = 'flex';
+            document.getElementById('activeExplanation').style.display = 'none';
+      
+            setTimeout(() => {
+                let aiResponse = '';
+                let suggestionId = '';
+                let tags = [];
+                
+  
+                if (message.toLowerCase().includes('plan') || message.toLowerCase().includes('schedule') || 
+                    message.toLowerCase().includes('routine') || message.toLowerCase().includes('weekly')) {
+                    
+                    if (message.toLowerCase().includes('exercise') || message.toLowerCase().includes('workout')) {
+                        aiResponse = `I've created an <strong>exercise plan</strong> based on your fitness level:<br><br>
+                        <strong>Beginner-Friendly Weekly Plan:</strong><br>
+                        • Mon/Wed: 20-min full body strength<br>
+                        • Tue/Thu: 25-min cardio (walking/jogging)<br>
+                        • Fri: 15-min flexibility & stretching<br>
+                        • Weekend: Active recovery or rest`;
+                        suggestionId = 'exercise-plan';
+                        tags = ['exercise', 'routine', 'wellness'];
+                    } else if (message.toLowerCase().includes('diet') || message.toLowerCase().includes('nutrition') || 
+                               message.toLowerCase().includes('meal') || message.toLowerCase().includes('eat')) {
+                        aiResponse = `Based on your dietary preferences, here's a <strong>nutrition plan</strong> for the week:<br><br>
+                        <strong>Balanced Meal Guidelines:</strong><br>
+                        • Breakfast: Protein + complex carbs (eggs + whole grain)<br>
+                        • Lunch: Lean protein + vegetables + healthy fats<br>
+                        • Dinner: Light protein + fibrous vegetables<br>
+                        • Snacks: Fruit, nuts, or yogurt between meals`;
+                        suggestionId = 'nutrition-plan';
+                        tags = ['nutrition', 'wellness'];
+                    } else {
+                        aiResponse = `I've designed a <strong>personalized wellness plan</strong> for your week:<br><br>
+                        <strong>Daily Framework:</strong><br>
+                        • Morning (15 min): Light exercise + hydration<br>
+                        • Afternoon (5 min): Posture check + stretch break<br>
+                        • Evening (10 min): Digital detox + relaxation<br>
+                        • Night (7-8 hours): Consistent sleep schedule`;
+                        suggestionId = 'wellness-plan';
+                        tags = ['wellness', 'routine', 'sleep'];
+                    }
+                } else if (message.toLowerCase().includes('sleep') || message.toLowerCase().includes('bed')) {
+                    aiResponse = `For better sleep, I suggest: <strong>Establishing a consistent bedtime routine</strong> starting 1 hour before sleep. This includes reducing screen time, practicing light stretching, and keeping your bedroom cool and dark.`;
+                    suggestionId = 'sleep-suggestion';
+                    tags = ['sleep', 'routine'];
+                } else if (message.toLowerCase().includes('water') || message.toLowerCase().includes('hydrat')) {
+                    aiResponse = `Based on your activity level, <strong>aim for 8-10 glasses of water daily</strong>. Try setting hourly reminders and keeping a water bottle visible. Dehydration can affect energy and focus.`;
+                    suggestionId = 'hydration-suggestion';
+                    tags = ['wellness', 'routine'];
+                } else if (message.toLowerCase().includes('stress') || message.toLowerCase().includes('anxiety')) {
+                    aiResponse = `For stress management: <strong>Practice 5-minute mindfulness breaks 3x daily</strong>. This can lower cortisol levels and improve resilience. I also suggest taking short walking breaks during work hours.`;
+                    suggestionId = 'stress-suggestion';
+                    tags = ['wellness', 'routine'];
+                } else {
+                    aiResponse = `Thanks for your question! I'm analyzing your health patterns to provide personalized advice. For now, remember that <strong>consistency in small healthy habits</strong> often yields better long-term results than occasional intense efforts.`;
+                    suggestionId = 'general-suggestion';
+                    tags = ['wellness'];
+                }
+                
+                const tagsHtml = tags.map(tag => `<div class="tag ${tag}">${tag.charAt(0).toUpperCase() + tag.slice(1)}</div>`).join('');
+                
+                const aiMessageHtml = `
+                    <div class="message ai">
+                        <div class="message-bubble">
+                            <div class="message-header">
+                                <div class="message-sender">
+                                    <i class="fas fa-robot"></i> HealthTrace AI
+                                </div>
+                                <div class="message-time">${timeString}</div>
+                            </div>
+                            <div class="message-text">
+                                <p>${aiResponse}</p>
+                            </div>
+                            <div class="suggestion-tags">
+                                ${tagsHtml}
+                            </div>
+                            <button class="why-btn" data-suggestion="${suggestionId}">
+                                <i class="fas fa-question-circle"></i> Why this suggestion?
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                chatMessages.innerHTML += aiMessageHtml;
+              
+                const newButton = chatMessages.querySelector('.message:last-child .why-btn');
+                newButton.addEventListener('click', function() {
+                    const suggestionId = this.getAttribute('data-suggestion');
+                    showExplanation(suggestionId);
+                });
+                
+            
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+                const stats = document.querySelectorAll('.stat-value');
+                if (stats.length >= 4) {
+                    stats[0].textContent = (Math.random() * 1 + 6.5).toFixed(1); 
+                    stats[1].textContent = Math.floor(Math.random() * 10 + 80) + '%';
+                    stats[2].textContent = Math.floor(Math.random() * 1000 + 5000); 
+                }
+                
+            }, 1000);
+        }
+    </script>
+</body>comment 
+</html>   remove 
