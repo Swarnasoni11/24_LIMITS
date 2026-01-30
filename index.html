@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>limits talk - Mental Health Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <span>LimitsTalk</span>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="active"><i class="fas fa-home"></i> Home</a>
+                <a href="#chat"><i class="fas fa-comment"></i> AI Assistant</a>
+                <a href="#questionnaire"><i class="fas fa-clipboard-list"></i> Questionnaire</a>
+                <a href="#face-analysis"><i class="fas fa-smile"></i> Mood Analysis</a>
+                <a href="#resources"><i class="fas fa-book"></i> Resources</a>
+            </div>
+            <div class="language-selector">
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="zh">中文</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+    <div class="hero-content">
+        <h1>Your AI Mental Health Companion</h1>
+        <p>24/7 support for stress, anxiety, and depression with personalized guidance</p>
+
+        <a 
+          href="https://x.convai.com/?xpid=72cbc151-b28d-41cc-9953-3201f05bc352&type=public"
+          class="cta-button"
+          target="_blank"
+        >
+            Start Talking with Ai Virtual Human ASistant <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <div class="hero-image">
+        <div class="ai-avatar">
+            <i class="fas fa-robot"></i>
+        </div>
+    </div>
+</section>
+
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Chatbot Section -->
+        <section id="chat" class="section">
+            <h2><i class="fas fa-comments"></i> AI Assistant Chat</h2>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="chat-info">
+                        <h3>MindCare Assistant</h3>
+                        <p>Online • Professional Mental Health Support</p>
+                    </div>
+                    <div class="chat-status" id="chatStatus">
+                        <span class="status-dot"></span>
+                        Analyzing...
+                    </div>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message ai-message">
+                        <div class="message-content">
+                            Hello! I'm LimitsTalk, your AI mental health assistant. I'm here to listen, support, and guide you through difficult times. How are you feeling today?
+                        </div>
+                        <div class="message-time">Just now</div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-area">
+                    <div class="input-wrapper">
+                        <input type="text" id="userInput" placeholder="Type your message here..." 
+                               onkeypress="handleKeyPress(event)">
+                        <button id="sendButton" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="quick-responses">
+                        <button class="quick-response" onclick="setQuickResponse('I feel anxious today')">
+                            I feel anxious today
+                        </button>
+                        <button class="quick-response" onclick="setQuickResponse('I\'m feeling depressed')">
+                            I'm feeling depressed
+                        </button>
+                        <button class="quick-response" onclick="setQuickResponse('I need coping strategies')">
+                            I need coping strategies
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-analysis">
+                <h4><i class="fas fa-chart-line"></i> Mood Analysis</h4>
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <div class="analysis-title">Current Mood Level</div>
+                        <div class="analysis-value" id="moodLevel">Neutral</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="moodProgress"></div>
+                        </div>
+                    </div>
+                    <div class="analysis-card">
+                        <div class="analysis-title">Stress Indicator</div>
+                        <div class="analysis-value" id="stressLevel">Moderate</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill stress-fill" id="stressProgress"></div>
+                        </div>
+                    </div>
+                    <div class="analysis-card">
+                        <div class="analysis-title">Conversation Topics</div>
+                        <div class="analysis-value" id="topics">Anxiety, Stress</div>
+                        <div class="topics-list" id="topicsList">
+                            <span class="topic-tag">Anxiety</span>
+                            <span class="topic-tag">Stress</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Questionnaire Section -->
+        <section id="questionnaire" class="section">
+            <h2><i class="fas fa-clipboard-check"></i> Mental Health Assessment</h2>
+            <div class="questionnaire-container">
+                <p class="section-description">
+                    This research-based questionnaire helps identify areas where you might need support. 
+                    Your answers will help tailor our assistance to your specific needs.
+                </p>
+                <a href="questionnaire.html" class="questionnaire-link">
+                    <i class="fas fa-external-link-alt"></i> 
+                    Take Full Assessment
+                </a>
+                
+                <div class="quick-assessment">
+                    <h3>Quick Self-Check</h3>
+                    <div class="question-item">
+                        <p>Over the last 2 weeks, how often have you felt little interest or pleasure in doing things?</p>
+                        <div class="option-group">
+                            <label class="option">
+                                <input type="radio" name="q1" value="0">
+                                <span>Not at all</span>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q1" value="1">
+                                <span>Several days</span>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q1" value="2">
+                                <span>More than half the days</span>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q1" value="3">
+                                <span>Nearly every day</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="question-item">
+                        <p>How often have you felt nervous, anxious, or on edge?</p>
+                        <div class="option-group">
+                            <label class="option">
+                                <input type="radio" name="q2" value="0">
+                                <span>Not at all</span>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q2" value="1">
+                                <span>Several days</span>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q2" value="2">
+                                <span>More than half the days</span>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="q2" value="3">
+                                <span>Nearly every day</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button 
+  class="submit-btn"
+  onclick="calculateQuickAssessment(); window.location.href='data.html';"
+>
+    Analyze My Responses
+</button>
+
+                    
+                    <div id="assessmentResult" class="result-card hidden">
+                        <h4>Your Assessment Result</h4>
+                        <div id="resultContent"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Face Recognition Section -->
+        <section id="face-analysis" class="section">
+            <h2><i class="fas fa-user-circle"></i> Facial Expression Analysis</h2>
+            <div class="face-container">
+                <div class="camera-section">
+                    <div class="camera-view">
+                        <video id="video" width="640" height="480" autoplay></video>
+                        <canvas id="canvas" width="640" height="480"></canvas>
+                    </div>
+                    <div class="camera-controls">
+                        <button id="startCamera" onclick="startCamera()">
+                            <i class="fas fa-camera"></i> Start Camera
+                        </button>
+                        <button id="captureEmotion" onclick="captureEmotion()" disabled>
+                            <i class="fas fa-smile"></i> Analyze Emotion
+                        </button>
+                        <button id="stopCamera" onclick="stopCamera()" disabled>
+                            <i class="fas fa-stop"></i> Stop Camera
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="emotion-results">
+                    <h3>Emotion Analysis Results</h3>
+                    <div class="emotion-metrics">
+                        <div class="metric">
+                            <div class="metric-label">Happiness</div>
+                            <div class="metric-value" id="happiness">0%</div>
+                            <div class="metric-bar">
+                                <div class="metric-fill" id="happinessBar"></div>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Sadness</div>
+                            <div class="metric-value" id="sadness">0%</div>
+                            <div class="metric-bar">
+                                <div class="metric-fill sadness-fill" id="sadnessBar"></div>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Stress (Estimated)</div>
+                            <div class="metric-value" id="stress">0%</div>
+                            <div class="metric-bar">
+                                <div class="metric-fill stress-fill" id="stressBar"></div>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Neutral</div>
+                            <div class="metric-value" id="neutral">0%</div>
+                            <div class="metric-bar">
+                                <div class="metric-fill neutral-fill" id="neutralBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h4><i class="fas fa-lightbulb"></i> Personalized Recommendations</h4>
+                        <div id="faceRecommendations">
+                            <p>Start camera and analyze your facial expression to get personalized recommendations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section id="resources" class="section">
+            <h2><i class="fas fa-hands-helping"></i> Resources & Support</h2>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3>Crisis Helplines</h3>
+                    <ul>
+                        <li>National Suicide Prevention: 988</li>
+                        <li>Crisis Text Line: Text HOME to 741741</li>
+                        <li>Veterans Crisis Line: 800-273-8255</li>
+                    </ul>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Mindfulness Exercises</h3>
+                    <ul>
+                        <li>5-minute breathing exercise</li>
+                        <li>Progressive muscle relaxation</li>
+                        <li>Guided meditation sessions</li>
+                    </ul>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-book-medical"></i>
+                    </div>
+                    <h3>Self-Help Materials</h3>
+                    <ul>
+                        <li>Cognitive Behavioral Therapy exercises</li>
+                        <li>Mood tracking worksheets</li>
+                        <li>Coping strategy guides</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p><strong>Important Note:</strong> This AI assistant is not a replacement for professional medical advice. 
+            If you're in crisis, please contact emergency services or a mental health professional immediately.</p>
+            <p class="disclaimer">AI responses are generated and should be used for informational purposes only.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="script.js"></script>
+    <script src="face-detection.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+</html>
